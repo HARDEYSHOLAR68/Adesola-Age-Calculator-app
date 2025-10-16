@@ -9,35 +9,10 @@ function calculateAge({ day, month, year }) {
   const today = new Date()
   const birthDate = new Date(year, month - 1, day)
 
-  let hasError = false
-
-  // Validate inputs
-  if (!day || day < 1 || day > 31) {
-    document.getElementById('dayError').textContent = 'Enter a valid day (1-31)'
-    hasError = true
-  } else {
-    document.getElementById('dayError').textContent = ''
-  }
-
-  if (!month || month < 1 || month > 12) {
-    document.getElementById('monthError').textContent = 'Enter a valid month (1-12)'
-    hasError = true
-  } else {
-    document.getElementById('monthError').textContent = ''
-  }
-
-  if (!year || year > today.getFullYear()) {
-    document.getElementById('yearError').textContent = 'Enter a valid year'
-    hasError = true
-  } else {
-    document.getElementById('yearError').textContent = ''
-  }
-
-  if (hasError) return
 
   if (birthDate > today) {
-    document.getElementById('yearError').textContent = 'Date of birth cannot be in the future!'
-    return
+    yearError = 'Date of birth cannot be in the future!'
+    hasError = true
   }
 
   // Calculate age
@@ -63,10 +38,10 @@ function calculateAge({ day, month, year }) {
 <template>
   <div class="card">
     <div class="container">
-      <!-- Correct event name -->
+
       <AgeForm @on-submit="calculateAge" />
 
-      <!-- Pass result to child -->
+     
       <AgeResult :result="result" />
     </div>
   </div>
@@ -160,10 +135,21 @@ input::placeholder{
   color: hsl(259, 100%, 65%);
 }
 
-p[id$="Error"] {
+.fade p {
   color: red;
-  font-size: 13px;
-  margin: 5px 0 0;
+  font-size: 0.8rem;
+  height: 16px; 
+  margin-top: 3px;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 @media screen and (max-width:600px) {
@@ -188,9 +174,19 @@ p[id$="Error"] {
         left: 50%;
         transform: translate(-50%,-50%);
     }
+
+    .error {
+      color: red;
+      font-size: 0.8rem;
+      height: 16px; /* keeps layout stable even if no error */
+      margin-top: 3px;
+    }
+
     .result{
         margin-top: 4rem;
     }
+
+
     .result h1{
         font-size: 4rem;
     }
